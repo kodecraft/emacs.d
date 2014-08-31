@@ -48,9 +48,9 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (solarized-dark)))
  '(show-paren-mode t)
- '(tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
+ '(tab-stop-list (number-sequence 4 120 4))
  '(tool-bar-mode nil))
- 
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -105,7 +105,7 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-(defun kdby-create-dir-bef-save ()
+(defun kdby/create-dir-bef-save ()
   "function to create directory if not created and to be called before save"
   (interactive)
   (when buffer-file-name
@@ -113,7 +113,7 @@
       (and (not (file-exists-p dir))
            (y-or-n-p (format "Directory %s does not exist, create it?" dir)))
       (make-directory dir t))))
-(add-hook 'before-save-hook 'kdby-create-dir-bef-save)
+(add-hook 'before-save-hook 'kdby/create-dir-bef-save)
 
 ;; TAB HYGIENE
 ;; make indentation commands use space only (never tab character)
@@ -125,13 +125,13 @@
 ;; (set-default tab-always-indent 1)
 
 ;; this sets tab to 4 in text mode for me
-(defun kdby-tab-always-indent-for-textmode ()
+(defun kdby/tab-always-indent-for-textmode ()
   (progn
     (setq tab-always-indent t)
     (setq indent-tabs-mode nil)
     (setq tab-width 4)
     (setq indent-line-function (quote insert-tab))))
-(add-hook 'text-mode-hook 'kdby-tab-always-indent-for-textmode)
+(add-hook 'text-mode-hook 'kdby/tab-always-indent-for-textmode)
 
 ;; horizontal split window by default
 (setq split-width-threshold 1)
@@ -186,9 +186,9 @@ manually reshow it. A double toggle will make it reappear"
     (unless (local-variable-p 'context-help)
       (set (make-local-variable 'context-help) t))
     (if (setq context-help (not context-help))
-	(progn
-	   (if (not (get-buffer-window (help-buffer)))
-	       (display-buffer (help-buffer)))))
+        (progn
+          (if (not (get-buffer-window (help-buffer)))
+              (display-buffer (help-buffer)))))
     (message "Context help %s" (if context-help "ON" "OFF"))))
 ;;
 (defun kdby/context-help ()
@@ -196,23 +196,23 @@ manually reshow it. A double toggle will make it reappear"
     Default behaviour can be turned off by setting the buffer local
     context-help to false"
   (interactive)
-  (let ((kdby-symbol (symbol-at-point))) ; symbol-at-point http://www.emacswiki.org/cgi-bin/wiki/thingatpt%2B.el
+  (let ((kdby/symbol (symbol-at-point))) ; symbol-at-point http://www.emacswiki.org/cgi-bin/wiki/thingatpt%2B.el
     (with-current-buffer (help-buffer)
       (unless (local-variable-p 'context-help)
         (set (make-local-variable 'context-help) t))
       (if (and context-help (get-buffer-window (help-buffer))
-               kdby-symbol)
-          (if (fboundp  kdby-symbol)
-              (describe-function kdby-symbol) 
-            (if (boundp  kdby-symbol) (describe-variable kdby-symbol)))))))
+               kdby/symbol)
+          (if (fboundp  kdby/symbol)
+              (describe-function kdby/symbol) 
+            (if (boundp  kdby/symbol) (describe-variable kdby/symbol)))))))
 ;;
 (defadvice eldoc-print-current-symbol-info
   (around eldoc-show-c-tag activate)
   (cond 
-	((eq major-mode 'emacs-lisp-mode) (kdby/context-help) ad-do-it)
-	((eq major-mode 'lisp-interaction-mode) (kdby/context-help) ad-do-it)
-	((eq major-mode 'apropos-mode) (kdby/context-help) ad-do-it)
-	(t ad-do-it)))
+   ((eq major-mode 'emacs-lisp-mode) (kdby/context-help) ad-do-it)
+   ((eq major-mode 'lisp-interaction-mode) (kdby/context-help) ad-do-it)
+   ((eq major-mode 'apropos-mode) (kdby/context-help) ad-do-it)
+   (t ad-do-it)))
 
 (global-set-key (kbd "C-c h") 'kdby/toggle-context-help)
 
@@ -232,7 +232,7 @@ manually reshow it. A double toggle will make it reappear"
     ad-do-it))
 
 ;; insert custom date and time
-(defun kdby-insert-datetime()
+(defun kdby/insert-datetime()
   "Insert current date yyyy-mm-dd."
   (interactive)
   (when (use-region-p)
@@ -240,7 +240,7 @@ manually reshow it. A double toggle will make it reappear"
     )
   (insert (format-time-string "%Y %b %d %A %I:%M %p")))
 
-(global-set-key (kbd "C-<f5> C-<f6>") 'kdby-insert-datetime)
+(global-set-key (kbd "C-<f5> C-<f6>") 'kdby/insert-datetime)
 
 ;; elisp nice defaults
 (transient-mark-mode 1)
@@ -262,11 +262,9 @@ manually reshow it. A double toggle will make it reappear"
       (catch 'notfound
         (yas/insert-snippet t)))))
 ;; modification to above to receive snippet name
-(defun kdby-insert-yas-snippet-by-name (x)
-  "inline doc string"
+(defun kdby/insert-yas-snippet-by-name (x)
+  "insert / expand by typing snippet name rather than its abbreviation"
   (interactive "sEnter name of snippet: ")
-  ;;(message "Name: %s" x)
-  (yas/insert-by-name x)
-)
+  (yas/insert-by-name x))
 ;;(yas/insert-by-name "")
-(global-set-key (kbd "C-c C-v") 'kdby-insert-yas-snippet-by-name)
+(global-set-key (kbd "C-c C-v") 'kdby/insert-yas-snippet-by-name)
