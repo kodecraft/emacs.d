@@ -65,17 +65,21 @@
 ;; yasnippet
 (require 'yasnippet)
 (yas-global-mode 1)
-
+;; Remove Yasnippet's default tab key binding
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
+;; Set Yasnippet's key binding to shift+tab
 (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-expand)
 
 ;; auto complete mod
 ;;; should be loaded after yasnippet so that they can work together
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
 ;;; set the trigger key so that it can work together with yasnippet on tab key,
 ;;; if the word exists in yasnippet, pressing tab will cause yasnippet to
 ;;; activate, otherwise, auto-complete will
+(global-auto-complete-mode t)
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
 
@@ -173,7 +177,7 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-(defun rgr/toggle-context-help ()
+(defun kdby/toggle-context-help ()
   "Turn on or off the context help.
 Note that if ON and you hide the help buffer then you need to
 manually reshow it. A double toggle will make it reappear"
@@ -187,30 +191,30 @@ manually reshow it. A double toggle will make it reappear"
 	       (display-buffer (help-buffer)))))
     (message "Context help %s" (if context-help "ON" "OFF"))))
 ;;
-(defun rgr/context-help ()
+(defun kdby/context-help ()
   "Display function or variable at point in *Help* buffer if visible.
     Default behaviour can be turned off by setting the buffer local
     context-help to false"
   (interactive)
-  (let ((rgr-symbol (symbol-at-point))) ; symbol-at-point http://www.emacswiki.org/cgi-bin/wiki/thingatpt%2B.el
+  (let ((kdby-symbol (symbol-at-point))) ; symbol-at-point http://www.emacswiki.org/cgi-bin/wiki/thingatpt%2B.el
     (with-current-buffer (help-buffer)
       (unless (local-variable-p 'context-help)
         (set (make-local-variable 'context-help) t))
       (if (and context-help (get-buffer-window (help-buffer))
-               rgr-symbol)
-          (if (fboundp  rgr-symbol)
-              (describe-function rgr-symbol) 
-            (if (boundp  rgr-symbol) (describe-variable rgr-symbol)))))))
+               kdby-symbol)
+          (if (fboundp  kdby-symbol)
+              (describe-function kdby-symbol) 
+            (if (boundp  kdby-symbol) (describe-variable kdby-symbol)))))))
 ;;
 (defadvice eldoc-print-current-symbol-info
   (around eldoc-show-c-tag activate)
   (cond 
-	((eq major-mode 'emacs-lisp-mode) (rgr/context-help) ad-do-it)
-	((eq major-mode 'lisp-interaction-mode) (rgr/context-help) ad-do-it)
-	((eq major-mode 'apropos-mode) (rgr/context-help) ad-do-it)
+	((eq major-mode 'emacs-lisp-mode) (kdby/context-help) ad-do-it)
+	((eq major-mode 'lisp-interaction-mode) (kdby/context-help) ad-do-it)
+	((eq major-mode 'apropos-mode) (kdby/context-help) ad-do-it)
 	(t ad-do-it)))
 
-(global-set-key (kbd "C-c h") 'rgr/toggle-context-help)
+(global-set-key (kbd "C-c h") 'kdby/toggle-context-help)
 
 ;; smartparens
 (require 'smartparens-config)
@@ -226,3 +230,43 @@ manually reshow it. A double toggle will make it reappear"
   "Prevent y-or-n-p from activating a dialog"
   (let ((use-dialog-box nil))
     ad-do-it))
+
+;; insert custom date and time
+(defun kdby-insert-datetime()
+  "Insert current date yyyy-mm-dd."
+  (interactive)
+  (when (use-region-p)
+    (delete-region (region-beginning) (region-end) )
+    )
+  (insert (format-time-string "%Y %b %d %A %I:%M %p")))
+
+(global-set-key (kbd "C-<f5> C-<f6>") 'kdby-insert-datetime)
+
+;; elisp nice defaults
+(transient-mark-mode 1)
+(delete-selection-mode 1)
+(show-paren-mode 1)
+(setq show-paren-style 'expression)
+
+;; include yasnippet in ac-sources
+(setq ac-sources
+      (append '(ac-source-yasnippet) ac-sources))
+;; helper function from Yasnippet author to find snippet by name
+(defun yas/insert-by-name (name)
+  (flet ((dummy-prompt
+          (prompt choices &optional display-fn)
+          (declare (ignore prompt))
+          (or (find name choices :key display-fn :test #'string=)
+              (throw 'notfound nil))))
+    (let ((yas/prompt-functions '(dummy-prompt)))
+      (catch 'notfound
+        (yas/insert-snippet t)))))
+;; modification to above to receive snippet name
+(defun kdby-insert-yas-snippet-by-name (x)
+  "inline doc string"
+  (interactive "sEnter name of snippet: ")
+  ;;(message "Name: %s" x)
+  (yas/insert-by-name x)
+)
+;;(yas/insert-by-name "")
+(global-set-key (kbd "C-c C-v") 'kdby-insert-yas-snippet-by-name)
