@@ -12,9 +12,10 @@
 (add-to-list 'load-path "~/.emacs.d/elpa")
 
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+                         ))
 (package-initialize)
 
 (defvar my-packages '(better-defaults ;; https://github.com/technomancy/better-defaults
