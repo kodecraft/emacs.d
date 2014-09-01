@@ -252,23 +252,14 @@ manually reshow it. A double toggle will make it reappear"
 ;; include yasnippet in ac-sources
 (setq ac-sources
       (append '(ac-source-yasnippet) ac-sources))
-;; helper function from Yasnippet author to find snippet by name
-(defun yas/insert-by-name (name)
-  (flet ((dummy-prompt
-          (prompt choices &optional display-fn)
-          (declare (ignore prompt))
-          (or (find name choices :key display-fn :test #'string=)
-              (throw 'notfound nil))))
-    (let ((yas/prompt-functions '(dummy-prompt)))
-      (catch 'notfound
-        (yas/insert-snippet t)))))
-;; modification to above to receive snippet name
-(defun kdby/insert-yas-snippet-by-name (x)
-  "insert / expand by typing snippet name rather than its abbreviation"
-  (interactive "sEnter name of snippet: ")
-  (yas/insert-by-name x))
-;;(yas/insert-by-name "")
-(global-set-key (kbd "C-c C-v") 'kdby/insert-yas-snippet-by-name)
+(global-set-key (kbd "C-c C-i") 'yas-insert-snippet)
+(global-set-key (kbd "C-c C-v") 'yas-visit-snippet-file)
+(global-set-key (kbd "C-c C-n") 'yas-new-snippet)
+;; change default prompting to ido style
+(setq yas-prompt-functions
+      (cons 'yas-ido-prompt
+	    (remove 'yas-ido-prompt
+		    yas-prompt-functions)))
 
 ;; nice font resize using ctrl and mousewheel
 (defun font-big ()
@@ -283,3 +274,4 @@ manually reshow it. A double toggle will make it reappear"
 ;;
 (global-set-key (kbd "<C-M-wheel-down>") 'font-small)
 (global-set-key (kbd "<C-M-wheel-up>") 'font-big)
+
