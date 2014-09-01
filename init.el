@@ -94,7 +94,7 @@
 (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
 (require 'key-chord)
 (key-chord-mode 1)
-(key-chord-define evil-insert-state-map  "jj" 'evil-normal-state)
+(key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
 
 (require 'powerline-evil)
 (powerline-center-evil-theme)
@@ -268,3 +268,17 @@ manually reshow it. A double toggle will make it reappear"
   (yas/insert-by-name x))
 ;;(yas/insert-by-name "")
 (global-set-key (kbd "C-c C-v") 'kdby/insert-yas-snippet-by-name)
+
+;; nice font resize using ctrl and mousewheel
+(defun font-big ()
+ (interactive)
+ (set-face-attribute 'default nil :height 
+  (+ (face-attribute 'default :height) 10)))
+;;
+(defun font-small ()
+ (interactive)
+ (set-face-attribute 'default nil :height 
+  (- (face-attribute 'default :height) 10)))
+;;
+(global-set-key (kbd "<C-M-wheel-down>") 'font-small)
+(global-set-key (kbd "<C-M-wheel-up>") 'font-big)
