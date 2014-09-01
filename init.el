@@ -97,6 +97,7 @@
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
 
+;; not working very well - need to resolve colour issue
 (require 'powerline-evil)
 (powerline-center-evil-theme)
 
@@ -255,6 +256,8 @@ manually reshow it. A double toggle will make it reappear"
 (global-set-key (kbd "C-c C-i") 'yas-insert-snippet)
 (global-set-key (kbd "C-c C-v") 'yas-visit-snippet-file)
 (global-set-key (kbd "C-c C-n") 'yas-new-snippet)
+(global-set-key (kbd "C-c C-r") 'yas-reload-all)
+
 ;; change default prompting to ido style
 (setq yas-prompt-functions
       (cons 'yas-ido-prompt
@@ -275,3 +278,18 @@ manually reshow it. A double toggle will make it reappear"
 (global-set-key (kbd "<C-M-wheel-down>") 'font-small)
 (global-set-key (kbd "<C-M-wheel-up>") 'font-big)
 
+;; useful function from mr xah
+(defun xah-copy-file-path (&optional xdir-path-only-p)
+  "Copy the current buffer's file path or dired path to `kill-ring'.
+If `universal-argument' is called, copy only the dir path."
+  (interactive "P")
+  (let ((filepath
+         (if (equal major-mode 'dired-mode)
+             default-directory
+           (buffer-file-name))))
+    (kill-new
+     (if (equal xdir-path-only-p nil)
+         filepath
+       (file-name-directory filepath))))
+  (message "file path copied."))
+(global-set-key (kbd "C-c C-d") 'xah-copy-file-path)
