@@ -293,3 +293,6 @@ If `universal-argument' is called, copy only the dir path."
        (file-name-directory filepath))))
   (message "file path copied."))
 (global-set-key (kbd "C-c C-d") 'xah-copy-file-path)
+
+(setq bookmark-default-file "~\\Dropbox\\p\\bookmarks.bmk"
+      bookmark-save-flag 1)
