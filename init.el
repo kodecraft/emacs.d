@@ -31,8 +31,11 @@
                       helm-projectile ;; installs both helm and projectile at the same tiem
                       yasnippet
                       powerline-evil ;; installs both powerline and evil at the same time
+                      litable ;; woohoo
                       key-chord ;;for remapping jk to escape like in EVIL / VIM from insert to normal mode
-                      smartparens)) ;; https://github.com/Fuco1/smartparens/wiki
+                      smartparens
+                      js2-mode
+                      js2-refactor)) ;; https://github.com/Fuco1/smartparens/wiki
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -136,7 +139,7 @@
 (add-hook 'text-mode-hook 'kdby/tab-always-indent-for-textmode)
 
 ;; horizontal split window by default
-(setq split-width-threshold 1)
+;; (setq split-width-threshold 1)
 
 ;;
 ;; ace jump mode major function
