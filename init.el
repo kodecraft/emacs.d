@@ -379,3 +379,7 @@ If `universal-argument' is called, copy only the dir path."
 ;;; lisp modes
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "(" nil :bind "C-("))
+
+;; enable auto spell checking for text and org mode 
+(add-hook 'text-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'turn-on-flyspell)
