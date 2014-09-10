@@ -380,6 +380,9 @@ If `universal-argument' is called, copy only the dir path."
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "(" nil :bind "C-("))
 
+;;; added this to work with org-mode
+(sp-pair "(" ")" :wrap "C-(")
+
 ;; enable auto spell checking for text and org mode 
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'turn-on-flyspell)
