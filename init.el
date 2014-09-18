@@ -87,6 +87,7 @@
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
 
+
 ;; helm
 (require 'helm-config)
 (helm-mode 1)
@@ -109,6 +110,10 @@
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
+
+;; get auto-complete (assuming this is already loaded and running) to auto-complete in org-mode
+(add-to-list 'ac-modes 'org-mode)
+
 
 (defun kdby/create-dir-bef-save ()
   "function to create directory if not created and to be called before save"
