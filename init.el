@@ -35,7 +35,8 @@
                       key-chord ;;for remapping jk to escape like in EVIL / VIM from insert to normal mode
                       smartparens ;; https://github.com/Fuco1/smartparens/wiki
                       js2-mode
-                      js2-refactor)) 
+                      js2-refactor
+                      adaptive-wrap)) 
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -391,3 +392,8 @@ If `universal-argument' is called, copy only the dir path."
 ;; enable auto spell checking for text and org mode 
 (add-hook 'text-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'turn-on-flyspell)
+
+;; added adaptive-wrap
+;; to use:
+;;   M-x visual-line-mode
+;;   M-x adaptive-wrap-prefix-mode
