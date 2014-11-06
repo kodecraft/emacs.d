@@ -62,12 +62,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Menlo_for_Powerline" :foundry "outline" :slant normal :weight normal :height 160 :width 
-
 normal)))))
 ;;(customize-variable (quote tab-stop-list))
 
-;; quick access to init.el
+;; quick access to frequently used documents
+(global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Dropbox/p/projects/learning/org/org-card.txt")))
 (global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
+(global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/Dropbox/p/p.org")))
+
+;; a command that will remove  'Quit: "empty or unsupported pasteboard type" type of errors
+(setq save-interprogram-paste-before-kill nil)
 
 ;; yasnippet
 (require 'yasnippet)
@@ -119,6 +123,8 @@ normal)))))
 ;; get auto-complete (assuming this is already loaded and running) to auto-complete in org-mode
 (add-to-list 'ac-modes 'org-mode)
 
+;; set up agenda list of files
+(setq org-agenda-files (list "~/Dropbox/p/p.org"))
 
 (defun kdby/create-dir-bef-save ()
   "function to create directory if not created and to be called before save"
@@ -399,8 +405,11 @@ If `universal-argument' is called, copy only the dir path."
 
 ;; added adaptive-wrap
 ;; to use:
-;;   M-x visual-line-mode
-;;   M-x adaptive-wrap-prefix-mode
+;; M-x visual-line-mode
+;; M-x adaptive-wrap-prefix-mode
+
+(global-visual-line-mode)
+(adaptive-wrap-prefix-mode)
 
 (defun xah-open-in-desktop ()
   "Show current file in desktop (OS's file manager)."
