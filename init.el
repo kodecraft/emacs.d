@@ -13,7 +13,7 @@
 
 (require 'package)
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ))
 (package-initialize)
@@ -36,7 +36,9 @@
                       smartparens ;; https://github.com/Fuco1/smartparens/wiki
                       js2-mode
                       js2-refactor
-                      adaptive-wrap)) 
+cygwin-mount
+setup-cygwin                      
+adaptive-wrap)) 
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -45,6 +47,18 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+(setq *win32* (eq system-type 'windows-nt) )
+;; win32 auto configuration, assuming that cygwin is installed at "c:/cygwin64"
+(if *win32*
+(progn
+    (setq cygwin-mount-cygwin-bin-directory "c:/cygwin64/bin")
+    (require 'setup-cygwin)
+    ;(setenv "HOME" "c:/cygwin/home/someuser") ;; better to set HOME env in GUI
+    ))
+
+(require 'cygwin-mount)
+(require 'setup-cygwin)
+
 (load-theme 'solarized-dark t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -52,6 +66,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (solarized-dark)))
+ '(org-agenda-files (quote ("~/.emacs.d/init.el" "~/Dropbox/p/p.org")))
  '(show-paren-mode t)
  '(tab-stop-list (number-sequence 4 120 4))
  '(tool-bar-mode nil))
@@ -61,8 +76,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Menlo_for_Powerline" :foundry "outline" :slant normal :weight normal :height 160 :width 
-normal)))))
+ '(default ((t (:family "Menlo_for_Powerline" :foundry "outline" :slant normal :weight normal :height 160 :width normal)))))
 ;;(customize-variable (quote tab-stop-list))
 
 ;; quick access to frequently used documents
@@ -99,6 +113,7 @@ normal)))))
 (require 'helm-config)
 (helm-mode 1)
 (global-set-key (kbd "C-c j") 'helm-mini)
+(setq projectile-completion-system 'grizzl)
 
 ;; evil - but this does not play well with Multiple Cursors - no solution yet ;<
 (require 'evil)
