@@ -23,22 +23,23 @@
                       clojure-test-mode
                       cider ;; make sure to have a matching cider-nrepl version to go with cider
                       color-theme-solarized
-                      multiple-cursors ;;https://github.com/magnars/multiple-cursors.el
-                      ace-jump-mode ;;https://github.com/winterTTr/ace-jump-mode
-                      expand-region
+                      multiple-cursors ;; https://github.com/magnars/multiple-cursors.el
+                      ace-jump-mode ;; https://github.com/winterTTr/ace-jump-mode
+                      expand-region ;; https://github.com/magnars/expand-region.el
                       flycheck
                       auto-complete
                       helm-projectile ;; installs both helm and projectile at the same tiem
                       yasnippet
                       powerline-evil ;; installs both powerline and evil at the same time
+                      evil-surround ;; https://github.com/timcharper/evil-surround/blob/master/evil-surround.el 
+                      key-chord ;; for remapping jk to escape like in EVIL / VIM from insert to normal mode
                       litable ;; woohoo
-                      key-chord ;;for remapping jk to escape like in EVIL / VIM from insert to normal mode
                       smartparens ;; https://github.com/Fuco1/smartparens/wiki
                       js2-mode
                       js2-refactor
-cygwin-mount
-setup-cygwin                      
-adaptive-wrap)) 
+                      cygwin-mount
+                      setup-cygwin                      
+                      adaptive-wrap))
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -83,6 +84,7 @@ adaptive-wrap))
 (global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Dropbox/p/projects/learning/org/org-card.txt")))
 (global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
 (global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/Dropbox/p/p.org")))
+(global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/jj/2015.org")))
 
 ;; a command that will remove  'Quit: "empty or unsupported pasteboard type" type of errors
 (setq save-interprogram-paste-before-kill nil)
@@ -122,6 +124,10 @@ adaptive-wrap))
 (require 'key-chord)
 (key-chord-mode 1)
 (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
+
+;; evil-surround (Tim Pope's vim-surround) - more info here https://github.com/timcharper/evil-surround
+(require 'evil-surround)
+(global-evil-surround-mode 1)
 
 ;; not working very well - need to resolve colour issue
 (require 'powerline-evil)
@@ -193,7 +199,7 @@ adaptive-wrap))
   '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
-;; multiple cursors
+;; multiple cursors (mc)
 (require 'multiple-cursors)
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
@@ -205,6 +211,7 @@ adaptive-wrap))
 ;; expand region
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "C-c =") 'er/contract-region)
 
 ;; get more documentation for elisps
 ;; more options here: http://www.emacswiki.org/emacs/ElDoc
