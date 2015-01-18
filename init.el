@@ -13,7 +13,7 @@
 
 (require 'package)
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                        ;; ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ))
 (package-initialize)
@@ -39,7 +39,11 @@
                       js2-refactor
                       cygwin-mount
                       setup-cygwin                      
+                      yaml-mode
                       adaptive-wrap))
+
+(require 're-builder)
+(setq reb-re-syntax 'string)
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
