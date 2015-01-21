@@ -453,6 +453,15 @@ If `universal-argument' is called, copy only the dir path."
        ((string-equal system-type "gnu/linux")
         (mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList))))))
 
+(defun my-font-height-value()
+    (cond
+     ((string-equal system-type "windows-nt") ; Microsoft Windows
+        160)
+     ((string-equal system-type "darwin")   ; Mac OS X
+        160)
+     ((string-equal system-type "gnu/linux") ; linux
+        96)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -466,7 +475,7 @@ If `universal-argument' is called, copy only the dir path."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Menlo for Powerline" :foundry "bitstream" :slant normal :weight normal :height 96 :width normal)))))
+ `(default ((t (:family "Menlo for Powerline" :foundry "bitstream" :slant normal :weight normal :height ,(my-font-height-value) :width normal)))))
 
 (load-theme 'solarized-dark t)
 (set-frame-parameter nil 'background-mode 'dark)
