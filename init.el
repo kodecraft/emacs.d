@@ -13,14 +13,14 @@
 
 (require 'package)
 (setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
-                        ;; ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ))
 (package-initialize)
 
 (defvar my-packages '(better-defaults ;; https://github.com/technomancy/better-defaults
                       clojure-mode
-                      clojure-test-mode
+                      ;; clojure-test-mode
                       cider ;; make sure to have a matching cider-nrepl version to go with cider
                       color-theme-solarized
                       multiple-cursors ;; https://github.com/magnars/multiple-cursors.el
@@ -55,34 +55,13 @@
 (setq *win32* (eq system-type 'windows-nt) )
 ;; win32 auto configuration, assuming that cygwin is installed at "c:/cygwin64"
 (if *win32*
-(progn
-    (setq cygwin-mount-cygwin-bin-directory "c:/cygwin64/bin")
-    (require 'setup-cygwin)
-    ;(setenv "HOME" "c:/cygwin/home/someuser") ;; better to set HOME env in GUI
-    ))
-
-(require 'cygwin-mount)
-(require 'setup-cygwin)
-
-(load-theme 'solarized-dark t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (solarized-dark)))
- '(org-agenda-files (quote ("~/.emacs.d/init.el" "~/Dropbox/p/p.org")))
- '(show-paren-mode t)
- '(tab-stop-list (number-sequence 4 120 4))
- '(tool-bar-mode nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Menlo_for_Powerline" :foundry "outline" :slant normal :weight normal :height 160 :width normal)))))
-;;(customize-variable (quote tab-stop-list))
+    (progn
+      (setq cygwin-mount-cygwin-bin-directory "c:/cygwin64/bin")
+      (require 'setup-cygwin)
+      ;(setenv "HOME" "c:/cygwin/home/someuser") ;; better to set HOME env in GUI
+      (require 'cygwin-mount)
+      (require 'setup-cygwin)
+))
 
 ;; quick access to frequently used documents
 (global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Dropbox/p/projects/learning/org/org-card.txt")))
@@ -113,7 +92,6 @@
 (global-auto-complete-mode t)
 (ac-set-trigger-key "TAB")
 (ac-set-trigger-key "<tab>")
-
 
 ;; helm
 (require 'helm-config)
@@ -315,9 +293,13 @@ manually reshow it. A double toggle will make it reappear"
  (interactive)
  (set-face-attribute 'default nil :height 
   (- (face-attribute 'default :height) 10)))
-;;
+;; for non-linux
 (global-set-key (kbd "<C-M-wheel-down>") 'font-small)
 (global-set-key (kbd "<C-M-wheel-up>") 'font-big)
+
+;; for linux
+(global-set-key (kbd "<M-S-mouse-7>") 'font-small)
+(global-set-key (kbd "<M-S-mouse-6>") 'font-big)
 
 ;; useful function from mr xah
 (defun xah-copy-file-path (&optional xdir-path-only-p)
@@ -470,3 +452,22 @@ If `universal-argument' is called, copy only the dir path."
         (mapc (lambda (fPath) (shell-command (format "open \"%s\"" fPath)) )  myFileList) )
        ((string-equal system-type "gnu/linux")
         (mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList))))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Menlo for Powerline" :foundry "bitstream" :slant normal :weight normal :height 96 :width normal)))))
+
+(load-theme 'solarized-dark t)
+(set-frame-parameter nil 'background-mode 'dark)
+(enable-theme 'solarized-dark)
