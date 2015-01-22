@@ -23,6 +23,7 @@
                       ;; clojure-test-mode
                       cider ;; make sure to have a matching cider-nrepl version to go with cider
                       color-theme-solarized
+                      dash-at-point
                       multiple-cursors ;; https://github.com/magnars/multiple-cursors.el
                       ace-jump-mode ;; https://github.com/winterTTr/ace-jump-mode
                       expand-region ;; https://github.com/magnars/expand-region.el
@@ -41,6 +42,12 @@
                       setup-cygwin                      
                       yaml-mode
                       adaptive-wrap))
+;; dash-at-point
+(add-to-list 'load-path "~/.emacs.d/dash-20141220.1452")
+(autoload 'dash-at-point "dash-at-point"
+          "Search the word at point with Dash." t nil)
+(global-set-key "\C-cd" 'dash-at-point)
+(global-set-key "\C-ce" 'dash-at-point-with-docset)
 
 (require 're-builder)
 (setq reb-re-syntax 'string)
