@@ -463,7 +463,7 @@ If `universal-argument' is called, copy only the dir path."
 (defun my-font-height-value()
     (cond
      ((string-equal system-type "windows-nt") ; Microsoft Windows
-        160)
+        120)
      ((string-equal system-type "darwin")   ; Mac OS X
         160)
      ((string-equal system-type "gnu/linux") ; linux
