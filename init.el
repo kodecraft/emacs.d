@@ -200,7 +200,7 @@
 ;; expand region
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "C-c =") 'er/contract-region)
+(global-set-key (kbd "C-M-=") 'er/contract-region)
 
 ;; get more documentation for elisps
 ;; more options here: http://www.emacswiki.org/emacs/ElDoc
@@ -386,6 +386,10 @@ If `universal-argument' is called, copy only the dir path."
 (define-key sp-keymap (kbd "H-s n") 'sp-add-to-next-sexp)
 (define-key sp-keymap (kbd "H-s j") 'sp-join-sexp)
 (define-key sp-keymap (kbd "H-s s") 'sp-split-sexp)
+
+;; to prevent auto-pairing when say in re-builder
+(global-set-key (kbd "C-x x") 'smartparens-mode)
+(global-set-key (kbd "C-x z") 're-builder)
 
 ;;;;;;;;;;;;;;;;;;
 ;; pair management
