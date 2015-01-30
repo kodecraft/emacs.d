@@ -49,6 +49,7 @@
 (global-set-key "\C-cd" 'dash-at-point)
 (global-set-key "\C-ce" 'dash-at-point-with-docset)
 
+;; sane re-builder default
 (require 're-builder)
 (setq reb-re-syntax 'string)
 
@@ -70,13 +71,19 @@
       (require 'setup-cygwin)
 ))
 
-;; quick access to frequently used documents
+;; recent files
+(recentf-mode 1)
+(global-set-key (kbd "<f8>") 'recentf-open-files)
+
+;; other quick access to frequently used documents
 (global-set-key (kbd "<f7>") (lambda() (interactive)(find-file "~/Dropbox/p/projects/learning/org/org-card.txt")))
 (global-set-key (kbd "<f6>") (lambda() (interactive)(find-file "~/.emacs.d/init.el")))
 (global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/Dropbox/p/p.org")))
 (global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/jj/2015.org")))
 
-;; a command that will remove  'Quit: "empty or unsupported pasteboard type" type of errors
+;; fuzzy match for M-x using Helm
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
 (setq save-interprogram-paste-before-kill nil)
 
 ;; yasnippet
