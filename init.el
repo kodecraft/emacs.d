@@ -81,11 +81,6 @@
 (global-set-key (kbd "<f5>") (lambda() (interactive)(find-file "~/Dropbox/p/p.org")))
 (global-set-key (kbd "<f4>") (lambda() (interactive)(find-file "~/jj/2015.org")))
 
-;; fuzzy match for M-x using Helm
-(global-set-key (kbd "M-x") 'helm-M-x)
-(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
-(setq save-interprogram-paste-before-kill nil)
-
 ;; yasnippet
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -112,6 +107,18 @@
 (helm-mode 1)
 (global-set-key (kbd "C-c j") 'helm-mini)
 (setq projectile-completion-system 'grizzl)
+
+;; fuzzy match for M-x using Helm
+(global-set-key (kbd "M-x") 'helm-M-x)
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(setq save-interprogram-paste-before-kill nil)
+(setq helm-semantic-fuzzy-match t
+      helm-imenu-fuzzy-match    t)
+;; other fuzzy match for Helm
+(setq helm-buffers-fuzzy-matching t)
+(setq helm-lisp-fuzzy-completion t)
+
 
 ;; evil - but this does not play well with Multiple Cursors - no solution yet ;<
 (require 'evil)
@@ -498,3 +505,17 @@ If `universal-argument' is called, copy only the dir path."
 (load-theme 'solarized-dark t)
 (set-frame-parameter nil 'background-mode 'dark)
 (enable-theme 'solarized-dark)
+
+;; mode toggle
+(make-variable-buffer-local 'orig-mode)
+(put 'orig-mode 'permanent-local t) ; this is needed as major mode changes kill all local vars
+(defun toggle_fundamental ()
+  "Toggle between Fundamental and current mode"
+  (interactive)
+  (if (not (eq 'fundamental-mode major-mode))
+      (progn
+        (setq orig-mode major-mode)
+        (fundamental-mode))
+    (when (boundp 'orig-mode)
+      (funcall (symbol-value 'orig-mode)))))
+(global-set-key (kbd "C-x t") 'toggle_fundamental)
