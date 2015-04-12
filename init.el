@@ -12,11 +12,11 @@
 (add-to-list 'load-path "~/.emacs.d/elpa")
 
 (require 'package)
-(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
+(setq package-archives '(("melpa" . "http://melpa.org/packages/")
                          ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ))
-(package-initialize)
+(package-initialize)                   
 
 (defvar my-packages '(better-defaults ;; https://github.com/technomancy/better-defaults
                       clojure-mode
@@ -41,6 +41,7 @@
                       cygwin-mount
                       setup-cygwin                      
                       yaml-mode
+                      restclient
                       adaptive-wrap))
 ;; dash-at-point
 (add-to-list 'load-path "~/.emacs.d/dash-20141220.1452")
@@ -282,7 +283,17 @@ manually reshow it. A double toggle will make it reappear"
     )
   (insert (format-time-string "%Y %b %d %A %I:%M %p")))
 
+;; insert custom date and time
+(defun kdby/insert-time()
+  "Insert current date yyyy-mm-dd."
+  (interactive)
+  (when (use-region-p)
+    (delete-region (region-beginning) (region-end) )
+    )
+  (insert (format-time-string "%I:%M %p")))
+
 (global-set-key (kbd "C-<f5> C-<f6>") 'kdby/insert-datetime)
+(global-set-key (kbd "C-S-<f5> C-S-<f6>") 'kdby/insert-time)
 
 ;; elisp nice defaults
 (transient-mark-mode 1)
@@ -345,6 +356,8 @@ If `universal-argument' is called, copy only the dir path."
 ;; global
 (require 'smartparens-config)
 (smartparens-global-mode t)
+;;ignore org-mode for now
+(push 'org-mode sp-ignore-modes-list)
 
 ;; highlights matching pairs
 (show-smartparens-global-mode t)
@@ -492,7 +505,10 @@ If `universal-argument' is called, copy only the dir path."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
+ '(custom-safe-themes
+   (quote
+    ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
+ '(restclient-inhibit-cookies t)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -500,7 +516,7 @@ If `universal-argument' is called, copy only the dir path."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(default ((t (:family "Menlo for Powerline" :foundry "bitstream" :slant normal :weight normal :height ,(my-font-height-value) :width normal)))))
+ '(default ((t (:family "Menlo for Powerline" :foundry "bitstream" :slant normal :weight normal :height 160 :width normal)))))
 
 (load-theme 'solarized-dark t)
 (set-frame-parameter nil 'background-mode 'dark)
@@ -519,3 +535,5 @@ If `universal-argument' is called, copy only the dir path."
     (when (boundp 'orig-mode)
       (funcall (symbol-value 'orig-mode)))))
 (global-set-key (kbd "C-x t") 'toggle_fundamental)
+
+(require 'restclient)
