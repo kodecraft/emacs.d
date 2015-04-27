@@ -42,7 +42,10 @@
                       setup-cygwin                      
                       yaml-mode
                       restclient
-                      adaptive-wrap))
+                      adaptive-wrap
+                      go-mode
+                      exec-path-from-shell
+                      flycheck))
 ;; dash-at-point
 (add-to-list 'load-path "~/.emacs.d/dash-20141220.1452")
 (autoload 'dash-at-point "dash-at-point"
@@ -147,6 +150,19 @@
 
 ;; get auto-complete (assuming this is already loaded and running) to auto-complete in org-mode
 (add-to-list 'ac-modes 'org-mode)
+
+(defun org-set-line-checkbox (arg)
+  (interactive "P")
+  (let ((n (or arg 1)))
+    (when (region-active-p)
+      (setq n (count-lines (region-beginning)
+                           (region-end)))
+      (goto-char (region-beginning)))
+    (dotimes (i n)
+      (beginning-of-line)
+      (insert "- [ ] ")
+      (forward-line))
+    (beginning-of-line)))
 
 ;; set up agenda list of files
 (setq org-agenda-files (list "~/Dropbox/p/p.org"))
@@ -508,6 +524,9 @@ If `universal-argument' is called, copy only the dir path."
  '(custom-safe-themes
    (quote
     ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
+ '(org-agenda-files
+   (quote
+    ("~/Dropbox/p/projects/tp/B2B Bundle/b2b-readme.org" "~/Dropbox/p/p.org")))
  '(restclient-inhibit-cookies t)
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -537,3 +556,15 @@ If `universal-argument' is called, copy only the dir path."
 (global-set-key (kbd "C-x t") 'toggle_fundamental)
 
 (require 'restclient)
+
+;;golang related
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
+(add-to-list 'load-path "~/.emacs.d/go-autocomplete")
+(require 'go-autocomplete)
+(require 'auto-complete-config)
+(ac-config-default)
+
